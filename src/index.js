@@ -132,10 +132,10 @@ function placeShips(board) {
 
 function handlePlayerGuess(row, column) {
     if (aiBoard[row][column] !== null) {
-        alert('You hit the AI\'s ship!');
+        logGameMessage('You hit the AI\'s ship!');
         aiBoard[row][column] = 'X';
     } else {
-        alert('You missed!');
+        logGameMessage('You missed!');
         aiBoard[row][column] = 'O';
     }
     renderAiBoard(aiBoard);
@@ -143,20 +143,19 @@ function handlePlayerGuess(row, column) {
 }
 
 function checkGameOver() {
+
+    const WIN_CONDITION = 13;
     // Check if all ships on AI board have been hit
-    let isGameOver = true;
+    let xCount = 0
     for (let i = 0; i < aiBoard.length; i++) {
         for (let j = 0; j < aiBoard[i].length; j++) {
-            if (aiBoard[i][j] !== null && aiBoard[i][j] !== 'X') {
-                isGameOver = false;
-                break;
+            if (aiBoard[i][j] === 'X') {
+                xCount++;
             }
         }
-        if (!isGameOver) {
-            break;
-        }
     }
-    if (isGameOver) {
+    
+    if (xCount === WIN_CONDITION) {
         alert('You win!');
         return;
     }
@@ -166,29 +165,33 @@ function checkGameOver() {
     const aiGuessColumn = Math.floor(Math.random() * playerBoard[0].length);
 
     if (playerBoard[aiGuessRow][aiGuessColumn] !== null) {
-        alert('AI hit your ship!');
+        logGameMessage('AI hit your ship!');
         playerBoard[aiGuessRow][aiGuessColumn] = 'X';
         renderBoard(playerBoard);
     } else {
-        alert('AI missed!');
+        logGameMessage('AI missed!');
     }
 
     // Check if all ships on player board have been hit
-    isGameOver = true;
+    xCount = 0
     for (let i = 0; i < playerBoard.length; i++) {
         for (let j = 0; j < playerBoard[i].length; j++) {
-            if (playerBoard[i][j] !== null && playerBoard[i][j] !== 'X') {
-                isGameOver = false;
-                break;
+            if (playerBoard[i][j] === 'X') {
+                xCount++;
             }
         }
-        if (!isGameOver) {
-            break;
-        }
+
     }
-    if (isGameOver) {
+    if (xCount === WIN_CONDITION) {
         alert('AI wins!');
     }
+}
+
+function logGameMessage(message) {
+    const logContainer = document.getElementById('game-log');
+    const logMessage = document.createElement('p');
+    logMessage.textContent = message;
+    logContainer.appendChild(logMessage);
 }
 
 const playerBoard = generateBoard(10, 10);
