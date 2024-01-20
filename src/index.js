@@ -130,17 +130,46 @@ function placeShips(board) {
     }
 }
 
+let playerTurn = true; // true for player, false for AI
+
 function handlePlayerGuess(row, column) {
+    if (aiBoard[row][column] === 'X' || aiBoard[row][column] === 'O') {
+        addLogMessage('You have already targeted this spot!');
+        return; // exit the function if the spot has already been targeted
+    }
     if (aiBoard[row][column] !== null) {
         addLogMessage('You hit the AI\'s ship!');
         aiBoard[row][column] = 'X';
     } else {
         addLogMessage('You missed!');
         aiBoard[row][column] = 'O';
+        playerTurn = false;
     }
     renderAiBoard(aiBoard);
     checkGameOver();
+    while (!playerTurn) {
+        handleAiGuess();
+    }
 }
+
+function handleAiGuess() {
+    let aiGuessRow, aiGuessColumn;
+    // AI makes a guess
+    do {
+        aiGuessRow = Math.floor(Math.random() * playerBoard.length);
+        aiGuessColumn = Math.floor(Math.random() * playerBoard[0].length);
+    } while (playerBoard[aiGuessRow][aiGuessColumn] === 'X' || playerBoard[aiGuessRow][aiGuessColumn] === 'O'); // keep guessing until an untargeted spot is found
+
+    if (playerBoard[aiGuessRow][aiGuessColumn] !== null) {
+        addLogMessage('AI hit your ship!');
+        playerBoard[aiGuessRow][aiGuessColumn] = 'X';
+        renderBoard(playerBoard);
+    } else {
+        addLogMessage('AI missed!');
+        playerTurn = true;
+    }
+}
+
 
 function checkGameOver() {
 
@@ -160,17 +189,7 @@ function checkGameOver() {
         return;
     }
 
-    // AI makes a guess
-    const aiGuessRow = Math.floor(Math.random() * playerBoard.length);
-    const aiGuessColumn = Math.floor(Math.random() * playerBoard[0].length);
 
-    if (playerBoard[aiGuessRow][aiGuessColumn] !== null) {
-        addLogMessage('AI hit your ship!');
-        playerBoard[aiGuessRow][aiGuessColumn] = 'X';
-        renderBoard(playerBoard);
-    } else {
-        addLogMessage('AI missed!');
-    }
 
     // Check if all ships on player board have been hit
     xCount = 0
