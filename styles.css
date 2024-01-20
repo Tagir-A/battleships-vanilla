@@ -1,9 +1,68 @@
-
-
+:root {
+    --title-xxl: calc(1.5em + 1.5vw);
+    --title-xl: calc(1.4em + 1.4vw);
+    --title-l: calc(1.3em + 1.3vw);
+    --title-m: calc(1.2em + 1.2vw);
+    --title-s: calc(1.1em + 1.1vw);
+    --title-xs: calc(1em + 1vw);
+    --text: calc(0.8em + 0.8vw);
+}
 body {
     font-family: 'Roboto', sans-serif;
+    color: rgba(0, 0, 0, 0.87);
+    font-weight: 400;
+    line-height: 1.5;
+    font-size: var(--text);
+    letter-spacing: 0.00938em;
     padding: 20px;
     background-color: #f5f5f5;
+}
+
+h1 {
+    font-size: var(--title-xxl);
+    font-weight: 300;
+    letter-spacing: -0.01562em;
+}
+
+h2 {
+    font-size: var(--title-xl);
+    font-weight: 300;
+    letter-spacing: -0.00833em;
+}
+
+h3 {
+    font-size: var(--title-l);
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+h4 {
+    font-size: var(--title-m);
+    font-weight: 400;
+    letter-spacing: 0.00735em;
+}
+
+h5 {
+    font-size: var(--title-s);
+    font-weight: 400;
+    letter-spacing: 0;
+}
+
+h6 {
+    font-size: var(--title-xs);
+    font-weight: 500;
+    letter-spacing: 0.0075em;
+}
+
+p {
+    font-size: var(--text);
+    font-weight: 400;
+    letter-spacing: 0.00938em;
+}
+
+main {
+    max-width: 900px;
+    margin: 0 auto;
 }
 
 .row {
@@ -34,10 +93,48 @@ body {
 .row:last-child .cell {
     margin-bottom: 0;
 }
-#game-board {
-    margin-bottom: 20px;
+
+/* Boards styles */
+
+.game-boards {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* two equally wide columns */
+    grid-template-rows: auto auto; /* two rows, height determined by content */
+    gap: 20px; /* space between grid items */
+    justify-items: left;
 }
 
+#game-board,
 #ai-game-board {
-    margin-top: 20px;
+    grid-row: 2; /* position both game boards in the second row */
+}
+
+.your-board-title {
+    grid-column: 1;
+    grid-row: 1;
+    margin: 0;
+}
+
+.enemy-board-title {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+}
+
+/* Log styles */
+
+#log-container {
+    background-color: #e0e0e0; /* slightly different background color */
+    border: 1px solid #000; /* slim border */
+    width: 100%; /* full width */
+    height: 300px; /* fixed height */
+    overflow-y: auto; /* make it scrollable */
+    max-width: 600px; /* maximum width */
+    min-width: 350px; /* minimum width */
+    margin: 0 auto; /* center the container */
+}
+
+#log-title {
+    text-align: center; /* center the title */
+    font-weight: bold; /* make the title bold */
 }

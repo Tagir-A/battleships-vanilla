@@ -6,16 +6,21 @@
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <main>
+
     <h1>Battleships Game</h1>
-    <div id="game-board"></div>
-    <div id="ai-game-board"></div>
-    <div id="game-log"></div>
-    <form id="player-input">
-        <label for="coordinate">Enter a coordinate (e.g., A5):</label>
-        <input type="text" id="coordinate" name="coordinate">
-        <input type="submit" value="Fire!">
-    </form>
+    <section class="game-boards">
+        <h3 class="your-board-title">Your board</h3>
+        <div id="game-board"></div>
+        <h3 class="enemy-board-title">Enemy board</h3>
+        <div id="ai-game-board"></div>
+    </section>
+    <h2 id="log-title">Logs</h2>
+    <div id="log-container"></div>
+
     <div id="game-status"></div>
+</main>
+
     <script src="src/index.js"></script>
 </body>
 </html>

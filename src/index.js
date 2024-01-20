@@ -132,10 +132,10 @@ function placeShips(board) {
 
 function handlePlayerGuess(row, column) {
     if (aiBoard[row][column] !== null) {
-        logGameMessage('You hit the AI\'s ship!');
+        addLogMessage('You hit the AI\'s ship!');
         aiBoard[row][column] = 'X';
     } else {
-        logGameMessage('You missed!');
+        addLogMessage('You missed!');
         aiBoard[row][column] = 'O';
     }
     renderAiBoard(aiBoard);
@@ -165,11 +165,11 @@ function checkGameOver() {
     const aiGuessColumn = Math.floor(Math.random() * playerBoard[0].length);
 
     if (playerBoard[aiGuessRow][aiGuessColumn] !== null) {
-        logGameMessage('AI hit your ship!');
+        addLogMessage('AI hit your ship!');
         playerBoard[aiGuessRow][aiGuessColumn] = 'X';
         renderBoard(playerBoard);
     } else {
-        logGameMessage('AI missed!');
+        addLogMessage('AI missed!');
     }
 
     // Check if all ships on player board have been hit
@@ -187,11 +187,14 @@ function checkGameOver() {
     }
 }
 
-function logGameMessage(message) {
-    const logContainer = document.getElementById('game-log');
-    const logMessage = document.createElement('p');
-    logMessage.textContent = message;
-    logContainer.appendChild(logMessage);
+function addLogMessage(message) {
+    var logContainer = document.getElementById('log-container');
+    var newLogMessage = document.createElement('p');
+    newLogMessage.textContent = message;
+    logContainer.appendChild(newLogMessage);
+
+    // Scroll to the bottom of the log container
+    logContainer.scrollTop = logContainer.scrollHeight;
 }
 
 const playerBoard = generateBoard(10, 10);
