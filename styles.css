@@ -14,7 +14,8 @@ body {
   line-height: 1.5;
   font-size: var(--text);
   letter-spacing: 0.00938em;
-  padding: 2vw;
+  padding-left: 2vw;
+  padding-right: 2vw;
   background-color: #f5f5f5;
   -webkit-font-smoothing: antialiased; /* for Webkit browsers like Chrome and Safari */
   -moz-osx-font-smoothing: grayscale; /* for Firefox */
@@ -24,18 +25,21 @@ h1 {
   font-size: var(--title-xxl);
   font-weight: 300;
   letter-spacing: -0.01562em;
+  margin: 0;
 }
 
 h2 {
   font-size: var(--title-xl);
   font-weight: 300;
   letter-spacing: -0.00833em;
+  margin: 0;
 }
 
 h3 {
   font-size: var(--title-l);
   font-weight: 400;
   letter-spacing: 0;
+  margin: 0;
 }
 
 h4 {
@@ -63,7 +67,7 @@ p {
 }
 
 main {
-  max-width: 900px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 

@@ -36,14 +36,22 @@ function renderBoard(board) {
     }
 }
 
+const aiBoardContainer = document.getElementById('ai-game-board');
+aiBoardContainer.addEventListener('click', function(event) {
+    if (event.target.matches('.cell')) {
+        const row = event.target.dataset.row;
+        const column = event.target.dataset.column;
+        handlePlayerGuess(row, column);
+    }
+});
+
 /**
  * Renders the ai game board to the page.
  * AI board ships are hidden until hit.
  * @param {Array<Array<null>>} board - The game board to render.
  */
 function renderAiBoard(board) {
-    const container = document.getElementById('ai-game-board');
-    container.innerHTML = '';
+    aiBoardContainer.innerHTML = '';
     for (let i = 0; i < board.length; i++) {
         const row = document.createElement('div');
         row.classList.add('row');
@@ -56,13 +64,14 @@ function renderAiBoard(board) {
             } else if (board[i][j] === 'O') {
                 cell.textContent = 'O';
             }
-            cell.addEventListener('click', function() {
-                handlePlayerGuess(i, j);
-            });
+            cell.dataset.row = i;
+            cell.dataset.column = j;
             row.appendChild(cell);
         }
-        container.appendChild(row);
+        aiBoardContainer.appendChild(row);
     }
+
+
 }
 /** 
  * Places the ships on the game board.
