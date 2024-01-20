@@ -1,140 +1,165 @@
 :root {
-    --title-xxl: calc(1.5em + 1.5vw);
-    --title-xl: calc(1.4em + 1.4vw);
-    --title-l: calc(1.3em + 1.3vw);
-    --title-m: calc(1.2em + 1.2vw);
-    --title-s: calc(1.1em + 1.1vw);
-    --title-xs: calc(1em + 1vw);
-    --text: calc(0.8em + 0.8vw);
+  --title-xxl: calc(1.5em + 1.5vw);
+  --title-xl: calc(1.4em + 1.4vw);
+  --title-l: calc(1.3em + 1.3vw);
+  --title-m: calc(1.2em + 1.2vw);
+  --title-s: calc(1.1em + 1.1vw);
+  --title-xs: calc(1em + 1vw);
+  --text: calc(0.8em + 0.8vw);
 }
 body {
-    font-family: 'Roboto', sans-serif;
-    color: rgba(0, 0, 0, 0.87);
-    font-weight: 400;
-    line-height: 1.5;
-    font-size: var(--text);
-    letter-spacing: 0.00938em;
-    padding: 20px;
-    background-color: #f5f5f5;
+  font-family: "Roboto", sans-serif;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 400;
+  line-height: 1.5;
+  font-size: var(--text);
+  letter-spacing: 0.00938em;
+  padding: 2vw;
+  background-color: #f5f5f5;
 }
 
 h1 {
-    font-size: var(--title-xxl);
-    font-weight: 300;
-    letter-spacing: -0.01562em;
+  font-size: var(--title-xxl);
+  font-weight: 300;
+  letter-spacing: -0.01562em;
 }
 
 h2 {
-    font-size: var(--title-xl);
-    font-weight: 300;
-    letter-spacing: -0.00833em;
+  font-size: var(--title-xl);
+  font-weight: 300;
+  letter-spacing: -0.00833em;
 }
 
 h3 {
-    font-size: var(--title-l);
-    font-weight: 400;
-    letter-spacing: 0;
+  font-size: var(--title-l);
+  font-weight: 400;
+  letter-spacing: 0;
 }
 
 h4 {
-    font-size: var(--title-m);
-    font-weight: 400;
-    letter-spacing: 0.00735em;
+  font-size: var(--title-m);
+  font-weight: 400;
+  letter-spacing: 0.00735em;
 }
 
 h5 {
-    font-size: var(--title-s);
-    font-weight: 400;
-    letter-spacing: 0;
+  font-size: var(--title-s);
+  font-weight: 400;
+  letter-spacing: 0;
 }
 
 h6 {
-    font-size: var(--title-xs);
-    font-weight: 500;
-    letter-spacing: 0.0075em;
+  font-size: var(--title-xs);
+  font-weight: 500;
+  letter-spacing: 0.0075em;
 }
 
 p {
-    font-size: var(--text);
-    font-weight: 400;
-    letter-spacing: 0.00938em;
+  font-size: var(--text);
+  font-weight: 400;
+  letter-spacing: 0.00938em;
 }
 
 main {
-    max-width: 900px;
-    margin: 0 auto;
+  max-width: 900px;
+  margin: 0 auto;
 }
 
 .row {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 4px;
+  display: flex;
+  justify-content: center;
+  margin-bottom: 4px;
 }
 
 .cell {
-    width: 30px;
-    height: 30px;
-    border: 1px solid #000;
-    box-sizing: border-box;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-right: 4px;
-    background-color: #fff;
-    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 
-                0px 1px 1px 0px rgba(0,0,0,0.14), 
-                0px 1px 3px 0px rgba(0,0,0,0.12);
+  width: 7vw;
+  height: 7vw;
+  border: 1px solid #000;
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 4px;
+  background-color: #fff;
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2),
+    0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 }
+@media (min-width: 600px) {
+    .cell {
+        width: 30px;
+        height: 30px;
+        font-size: 14px;
+  }
 
 .cell:last-child {
-    margin-right: 0;
+  margin-right: 0;
 }
 
 .row:last-child .cell {
-    margin-bottom: 0;
+  margin-bottom: 0;
 }
 
 /* Boards styles */
 
 .game-boards {
-    display: grid;
-    grid-template-columns: 1fr 1fr; /* two equally wide columns */
-    grid-template-rows: auto auto; /* two rows, height determined by content */
-    gap: 20px; /* space between grid items */
-    justify-items: left;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* two equally wide columns */
+  grid-template-rows: auto auto; /* two rows, height determined by content */
+  gap: 20px; /* space between grid items */
+  justify-items: left;
 }
 
 #game-board,
 #ai-game-board {
-    grid-row: 2; /* position both game boards in the second row */
+  grid-row: 2; /* position both game boards in the second row */
 }
 
 .your-board-title {
-    grid-column: 1;
-    grid-row: 1;
-    margin: 0;
+  grid-column: 1;
+  grid-row: 1;
+  margin: 0;
 }
 
 .enemy-board-title {
-    grid-column: 2;
-    grid-row: 1;
-    margin: 0;
+  grid-column: 2;
+  grid-row: 1;
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  .game-boards {
+    grid-template-columns: 1fr; /* one column on small screens */
+  }
+
+  #game-board,
+  #ai-game-board {
+    grid-row: auto; /* position game boards in their natural order */
+  }
+
+  .your-board-title {
+    grid-column: 1;
+    grid-row: auto;
+  }
+
+  .enemy-board-title {
+    grid-column: 1;
+    grid-row: auto;
+  }
 }
 
 /* Log styles */
 
 #log-container {
-    background-color: #e0e0e0; /* slightly different background color */
-    border: 1px solid #000; /* slim border */
-    width: 100%; /* full width */
-    height: 300px; /* fixed height */
-    overflow-y: auto; /* make it scrollable */
-    max-width: 600px; /* maximum width */
-    min-width: 350px; /* minimum width */
-    margin: 0 auto; /* center the container */
+  background-color: #e0e0e0; /* slightly different background color */
+  border: 1px solid #000; /* slim border */
+  width: 100%; /* full width */
+  height: 300px; /* fixed height */
+  overflow-y: auto; /* make it scrollable */
+  max-width: 600px; /* maximum width */
+  margin: 0 auto; /* center the container */
 }
 
 #log-title {
-    text-align: center; /* center the title */
-    font-weight: bold; /* make the title bold */
+  text-align: center; /* center the title */
+  font-weight: bold; /* make the title bold */
 }
