@@ -106,6 +106,17 @@ main {
   margin-bottom: 0;
 }
 
+.ship {
+  background-color: #000;
+}
+.hit {
+  background-color: #f44336;
+}
+/* Blue for misses */
+.miss {
+  background-color: #2196f3;
+}
+
 /* Boards styles */
 
 .game-boards {
