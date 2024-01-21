@@ -194,7 +194,7 @@ function handleShipDestroyed(ship, board) {
     }
     const after = board[row][column + size] || null;
     if (after) {
-      before.isHit = true;
+      after.isHit = true;
     }
 
     for (let i = -1; i < size + 1; i++) {
