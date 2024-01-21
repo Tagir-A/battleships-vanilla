@@ -58,21 +58,13 @@ function renderBoard(board) {
   }
 }
 
-const aiBoardContainer = document.getElementById("ai-game-board");
-aiBoardContainer.addEventListener("click", function (event) {
-  if (event.target.matches(".cell")) {
-    const row = event.target.dataset.row;
-    const column = event.target.dataset.column;
-    handlePlayerGuess(row, column);
-  }
-});
-
 /**
  * Renders the ai game board to the page.
  * AI board ships are hidden until hit.
  * @param {Array<Array<null>>} board - The game board to render.
  */
 function renderAiBoard(board) {
+  const aiBoardContainer = document.getElementById("ai-game-board");
   aiBoardContainer.innerHTML = "";
   for (let i = 0; i < board.length; i++) {
     const row = document.createElement("div");
@@ -102,11 +94,21 @@ function renderAiBoard(board) {
  * @param {Array<Array<null>>} board - The game board to place the ships on.
  */
 function placeShips(board) {
-  function canPlaceShip(board, row, col, length, horizontal) {
-    for (let i = 0; i < length; i++) {
+  function canPlaceShip(board, row, col, shipSize, horizontal) {
+    for (let i = 0; i < shipSize; i++) {
       let r = row + (horizontal ? 0 : i);
       let c = col + (horizontal ? i : 0);
-      if (r >= board.length || c >= board[0].length || board[r][c] === 1) {
+      if (
+        board[r][c]?.hasShip !== null ||
+        board[r - 1]?.[c]?.hasShip !== null ||
+        board[r + 1]?.[c]?.hasShip !== null ||
+        board[r][c - 1]?.hasShip !== null ||
+        board[r][c + 1]?.hasShip !== null ||
+        board[r - 1]?.[c - 1]?.hasShip !== null ||
+        board[r - 1]?.[c + 1]?.hasShip !== null ||
+        board[r + 1]?.[c - 1]?.hasShip !== null ||
+        board[r + 1]?.[c + 1]?.hasShip !== null
+      ) {
         return false;
       }
     }
@@ -136,69 +138,96 @@ function placeShips(board) {
 
     let shipPlaced = false;
     while (!shipPlaced) {
-      const randomRow = Math.floor(Math.random() * board.length);
-      const randomColumn = Math.floor(Math.random() * board[0].length);
+      const isHorizontal = getRandomIntInclusive(0, 1) === 0;
+      const randomRow = isHorizontal
+        ? getRandomIntInclusive(0, board.length - 1)
+        : getRandomIntInclusive(0, board.length - 1 - shipSize);
+      const randomColumn = isHorizontal
+        ? getRandomIntInclusive(0, board[0].length - 1 - shipSize)
+        : getRandomIntInclusive(0, board[0].length - 1);
 
-      const isHorizontal = Math.random() < 0.5;
+      const placeable = canPlaceShip(
+        board,
+        randomRow,
+        randomColumn,
+        shipSize,
+        isHorizontal
+      );
 
-      if (isHorizontal) {
-        if (randomColumn + shipSize <= board[0].length) {
-          let canPlaceShip = true;
-          for (let j = 0; j < shipSize; j++) {
-            if (
-              board[randomRow][randomColumn + j]?.hasShip !== null ||
-              (randomRow > 0 &&
-                board[randomRow - 1][randomColumn + j]?.hasShip !== null) ||
-              (randomRow < board.length - 1 &&
-                board[randomRow + 1][randomColumn + j]?.hasShip !== null) ||
-              (randomColumn > 0 &&
-                board[randomRow][randomColumn + j - 1]?.hasShip !== null) ||
-              (randomColumn < board[0].length - 1 &&
-                board[randomRow][randomColumn + j + 1]?.hasShip !== null)
-            ) {
-              canPlaceShip = false;
-              break;
-            }
-          }
-          if (canPlaceShip) {
-            for (let j = 0; j < shipSize; j++) {
-              board[randomRow][randomColumn + j].hasShip = ships[i];
-            }
-            shipPlaced = true;
-          }
+      if (placeable) {
+        for (let j = 0; j < shipSize; j++) {
+          let r = randomRow + (isHorizontal ? 0 : j);
+          let c = randomColumn + (isHorizontal ? j : 0);
+          board[r][c].hasShip = ships[i];
+          board[r][c].hasShip.start = { row: randomRow, column: randomColumn };
+          board[r][c].hasShip.horizontal = isHorizontal;
         }
-      } else {
-        if (randomRow + shipSize <= board.length) {
-          let canPlaceShip = true;
-          for (let j = 0; j < shipSize; j++) {
-            if (
-              board[randomRow + j][randomColumn]?.hasShip !== null ||
-              (randomColumn > 0 &&
-                board[randomRow + j][randomColumn - 1]?.hasShip !== null) ||
-              (randomColumn < board[0].length - 1 &&
-                board[randomRow + j][randomColumn + 1]?.hasShip !== null) ||
-              (randomRow > 0 &&
-                board[randomRow + j - 1][randomColumn]?.hasShip !== null) ||
-              (randomRow + j + 1 < board.length &&
-                board[randomRow + j + 1][randomColumn]?.hasShip !== null)
-            ) {
-              canPlaceShip = false;
-              break;
-            }
-          }
-          if (canPlaceShip) {
-            for (let j = 0; j < shipSize; j++) {
-              board[randomRow + j][randomColumn].hasShip = ships[i];
-            }
-            shipPlaced = true;
-          }
-        }
+        shipPlaced = true;
       }
     }
   }
 }
 
+const playerBoard = generateBoard(10, 10);
+const aiBoard = generateBoard(10, 10);
+
+placeShips(playerBoard);
+placeShips(aiBoard);
+
+renderBoard(playerBoard);
+renderAiBoard(aiBoard);
+
 let playerTurn = true; // true for player, false for AI
+
+/**
+ *
+ * @param {Object} ship - The ship that was destroyed.
+ * Mark all cells around the ship as hit.
+ */
+function handleShipDestroyed(ship, board) {
+  const { start, horizontal, size } = ship;
+  const { row, column } = start;
+  if (horizontal) {
+    const before = board[row][column - 1] || null;
+    if (before) {
+      before.isHit = true;
+    }
+    const after = board[row][column + size] || null;
+    if (after) {
+      before.isHit = true;
+    }
+
+    for (let i = -1; i < size + 1; i++) {
+      const above = board[row - 1]?.[column + i] || null;
+      if (above) {
+        above.isHit = true;
+      }
+      const below = board[row + 1]?.[column + i] || null;
+      if (below) {
+        below.isHit = true;
+      }
+    }
+  } else {
+    const above = board[row - 1]?.[column] || null;
+    if (above) {
+      above.isHit = true;
+    }
+    const below = board[row + size]?.[column] || null;
+    if (below) {
+      below.isHit = true;
+    }
+    for (let i = -1; i < size + 1; i++) {
+      const left = board[row + i]?.[column - 1] || null;
+      if (left) {
+        left.isHit = true;
+      }
+      const right = board[row + i]?.[column + 1] || null;
+      if (right) {
+        right.isHit = true;
+      }
+    }
+  }
+}
 
 function handlePlayerGuess(row, column) {
   const cell = aiBoard[row][column];
@@ -210,6 +239,10 @@ function handlePlayerGuess(row, column) {
     addLogMessage("You hit the AI's ship!");
     cell.isHit = true;
     cell.hasShip.hits++;
+    if (cell.hasShip.hits === cell.hasShip.size) {
+      addLogMessage(`You destroyed the AI's ${cell.hasShip.name}!`);
+      handleShipDestroyed(cell.hasShip, aiBoard);
+    }
   } else {
     addLogMessage("You missed!");
     cell.isHit = true;
@@ -234,6 +267,18 @@ function handleAiGuess() {
     addLogMessage("AI hit your ship!");
     playerBoard[aiGuessRow][aiGuessColumn].isHit = true;
     playerBoard[aiGuessRow][aiGuessColumn].hasShip.hits++;
+    if (
+      playerBoard[aiGuessRow][aiGuessColumn].hasShip.hits ===
+      playerBoard[aiGuessRow][aiGuessColumn].hasShip.size
+    ) {
+      addLogMessage(
+        `AI destroyed your ${playerBoard[aiGuessRow][aiGuessColumn].hasShip.name}!`
+      );
+      handleShipDestroyed(
+        playerBoard[aiGuessRow][aiGuessColumn].hasShip,
+        playerBoard
+      );
+    }
     renderBoard(playerBoard);
   } else {
     addLogMessage("AI missed!");
@@ -284,11 +329,11 @@ function addLogMessage(message) {
   logContainer.scrollTop = logContainer.scrollHeight;
 }
 
-const playerBoard = generateBoard(10, 10);
-const aiBoard = generateBoard(10, 10);
-
-placeShips(playerBoard);
-placeShips(aiBoard);
-
-renderBoard(playerBoard);
-renderAiBoard(aiBoard);
+const aiBoardContainer = document.getElementById("ai-game-board");
+aiBoardContainer.addEventListener("click", function (event) {
+  if (event.target.matches(".cell")) {
+    const row = event.target.dataset.row;
+    const column = event.target.dataset.column;
+    handlePlayerGuess(row, column);
+  }
+});
